@@ -16,14 +16,16 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     
-    const float BLOCL_ROW = 0.5f;
-    const float BLOCK_COL = 0.25f;
-    public List<GameObject> blockPrefabs;
+    const float BLOCK_ROW_SIZE = 0.53f;
+    const float BLOCK_COL_SIZE = 0.28f;
+    public GameObject blockPrefabs;
+    public List<GameObject> TestGameBoard;
 
     // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 1f;
+        selfGenerateArea(6,6);
 
     }
 
@@ -34,17 +36,33 @@ public class GameManager : MonoBehaviour
         
     }
 
-    private Vector2 getPostion(int row, int col){
-        Vector2 position = Vector2.zero;
-        position -= row * BLOCK_ROW * Vector2.UnitX;
-        position -= row * BlOCK_COl * Vector2.UnitY;
-        position += row * BLOCK_ROW * Vector2.UnitX;
-        position -= row * BlOCK_COl * Vector2.UnitY;
-    
+    private Vector3 getPostion(int row, int col){
+        Vector3 position = Vector3.zero;
+        int y_position = row;
+        if (col > row) y_position = col;
+
+        position = position + (col - row) * BLOCK_ROW_SIZE * Vector3.right;
+        position = position - (row + col) * BLOCK_COL_SIZE * Vector3.up;
+        Debug.Log(position);
+        return position;
     }
 
-    void SelfGenerateArea(int rows, int cols){
-        
+    void selfGenerateArea(int rows, int cols){
+        if (rows < 0 || cols < 0) {
+            Debug.Log("invalid row/col number");
+        }
+
+        TestGameBoard = new List<GameObject>();
+
+        for (int i = 0; i < rows; i++){
+            for (int j = 0; j < cols; j++){
+                TestGameBoard.Add((GameObject)Instantiate(blockPrefabs, getPostion(i,j), Quaternion.identity));
+                
+            }
+        }
     }
+
+
+
 
 }
