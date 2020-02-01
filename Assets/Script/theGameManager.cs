@@ -13,7 +13,7 @@ using UnityEngine;
 // the row start from 0, and from toppest block to down-left
 // the row start from 0, and from toppest block to down-left
 
-public class GameManager : MonoBehaviour
+public class theGameManager : MonoBehaviour
 {
     
     const float BLOCK_ROW_SIZE = 0.53f;
@@ -43,7 +43,6 @@ public class GameManager : MonoBehaviour
 
         position = position + (col - row) * BLOCK_ROW_SIZE * Vector3.right;
         position = position - (row + col) * BLOCK_COL_SIZE * Vector3.up;
-        Debug.Log(position);
         return position;
     }
 
@@ -56,7 +55,10 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < rows; i++){
             for (int j = 0; j < cols; j++){
-                TestGameBoard.Add((GameObject)Instantiate(blockPrefabs, getPostion(i,j), Quaternion.identity));
+                GameObject go = (GameObject)Instantiate(blockPrefabs, getPostion(i,j), Quaternion.identity);
+                go.transform.parent = GameObject.Find("GameBoard").transform;
+                go.layer = LayerMask.NameToLayer("Gound");
+                TestGameBoard.Add(go);
                 
             }
         }
